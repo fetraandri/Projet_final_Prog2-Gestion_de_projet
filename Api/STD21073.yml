@@ -1,0 +1,223 @@
+openapi: '3.0.2'
+info:
+  title: STD21073
+  version: '1.0'
+  description: 'API for "GESTION_DE_PROJET"' 
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: hei.fetra@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+tags:
+- name: "Employe"
+paths:
+     
+  /:
+    get:
+      tags:
+        - Employe
+      summary: Get a list of Employe
+      operationId: getEmploye
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int64
+          required: true    
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        200:
+          description: List Mission
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Mission'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "400_BAD_REQUEST"
+                  message:
+                    type: string
+                    example: "Parameter missing"
+    
+    
+
+  /Employe/{id_Employe}:
+    get:
+      tags:
+        - Employe
+      summary: Get a Mission by id and see all adresse
+      operationId: getMissionID
+      parameters:
+        - name: id_Employe
+          in: path
+          schema:
+            type: integer
+          required: true  
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+        400:
+          description: Bad Request
+          content: {}
+        404:
+          description: not found
+          content: {}  
+    delete:
+      tags:
+        - Employe
+      summary: delete a Mission by id
+      operationId: deleteMissionID
+      parameters:
+        - name: id_Employe
+          in: path
+          schema:
+            type: integer
+          required: true  
+      responses:
+        200:
+          description: deleted successfully
+        400:
+          description: Bad Request
+          content: {}
+        404:
+          description: not found
+          content: {}         
+    post:
+      tags:
+        - Employe
+      summary: post an adherent in a Mission
+      operationId: addMission
+      parameters:
+        - name: id_Employe
+          in: path
+          schema:
+            type: integer
+          required: true  
+      requestBody:
+        description: Mission adresse to update
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/NewEmploye'   
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+        400:
+          description: Bad Request
+          content: {}
+    
+             
+  /Employe/{id_Employe}/: 
+   
+    delete:
+      tags:
+        - Employe
+      summary: delete an adherent in a Mission
+      operationId: getMissionID
+      parameters:
+        - name: id_Employe
+          in: path
+          schema:
+            type: integer
+          required: true  
+        - name: id_student
+          in : path
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        description: Mission adresse to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/NewEmploye'   
+      responses:
+        200:
+          description: deleted successfully
+        400:
+          description: invalid ID
+          content: {}
+        404:
+          description: not found
+          content: {}              
+  
+
+components:
+  schemas:
+    Employe:
+      allOf:
+        - $ref: '#/components/schemas/NewEmploye'
+      type: object
+      properties:
+         id_student:
+          type: integer
+          format: int64      
+    NewEmploye:
+      type: object
+      properties:
+         Nom:
+          type: string
+         salaire: 
+          type: string  
+         telephone: 
+          type: string
+    Mission:
+      type: object
+      properties:
+        id_Employe:
+          type: string
+      allOf:
+        - $ref: '#/components/schemas/NewMission'
+      
+      
+    NewMission:
+      type: object
+      properties:
+        Nom:
+          type: string
+        PreNom:
+          type: string
+        adresse:
+          type: array
+          items :
+          $ref: '#/components/schemas/NewEmploye'
+          example:
+            - id: 1
+              Nom: Sherlock
+              salaire: STD00000
+            - id: 2
+              Nom: John
+              salaire: 50000
+
+     
